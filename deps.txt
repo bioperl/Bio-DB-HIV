@@ -1,0 +1,10 @@
+# CPAN deps (non-core) for shadowlib
+# (these appear in Build.PL)
+LWP::UserAgent
+HTTP::Request::Common
+HTTP::Response
+IO::String
+Error
+IO::Scalar
+XML::Simple
+CGI

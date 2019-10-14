@@ -448,6 +448,7 @@ sub error {
 }
 
 sub outputPrerun {
+  no warnings;
     print (($state{curct} ? $state{curct} : "No")
 	. " sequence"
 	. ($state{curct}>1 ? "s" : "")
@@ -580,7 +581,10 @@ sub outputInColumns {
     $n ||= int(60/($maxl+3)) || 1;
     $w ||= $maxl+3;
     my $coll = int(@items/$n);
-    $coll == @items/$n ? $coll : ++$coll;
+    {
+      no warnings;
+      $coll == @items/$n ? $coll : ++$coll;
+    }
     my @t;
     for my $j (0..$n-1) {
 	if ($j<$n-1) {
