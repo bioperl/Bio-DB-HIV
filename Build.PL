@@ -19,6 +19,7 @@ my $build = Module::Build->new(
   },
   requires => {
     'LWP::UserAgent' => 0,
+    'LWP::Protocol::https' => 0,
     'HTTP::Request::Common' => 0,
     'HTTP::Response' => 0,
     'IO::String' => 0,
