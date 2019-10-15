@@ -153,15 +153,17 @@ use warnings;
 use Term::ReadLine;
 use Bio::DB::HIV;
 use Bio::DB::Query::HIVQuery;
+use Bio::WebAgent;
 use Bio::SeqIO;
 use Error qw(:try);
 
 use Getopt::Std;
 our ($opt_v);
 getopts('v');
-my $db = new Bio::DB::HIV;
+my $db = Bio::DB::HIV->new();
 
-my $q = new Bio::DB::Query::HIVQuery();
+my $q = Bio::DB::Query::HIVQuery->new();
+my $ua = Bio::WebAgent->new('hivq');
 my $schema = $q->_schema;
 my $seqio;
 my @cmds = qw(
@@ -394,6 +396,16 @@ while ( !$done ) {
 	    m/^find$/ && do {
 		outputFind(@tok);
 		next CMD;
+	      };
+	    m/^ping$/ && do {
+	      my $ping = $ua->get($q->_map_db_uri);
+	      if ($ping->is_success) {
+		print "Connected\n";
+	      }
+	      else {
+		error("Not connected");
+	      }
+	      next CMD;
 	    };
 	    m/^help$/ && do {
 		unless ($tok[1]) {
@@ -420,7 +432,7 @@ while ( !$done ) {
 			    print "\n";
 			}
 			else {
-			    print "$state{$k}\n";
+			    print defined $state{$k} ? "$state{$k}\n" : "not set\n";;
 			}
 		    }
 		}
